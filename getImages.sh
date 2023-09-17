@@ -1,19 +1,14 @@
 #!/bin/bash
 
-# Specify the URL of the webpage
 url="https://www.kiet.edu/home/department_wise_faculty_list/MQ=="
 
-# Create a directory to store the images
 outputFolder="D:/Sean/Vision/Face Database/ECE"
 mkdir -p "$outputFolder"
 
-# Download the webpage content
 webpageContent=$(curl -s "$url")
 
-# Find all image tags in the HTML
 imageTags=$(echo "$webpageContent" | grep -o '<img [^>]*src="[^"]*' | sed -e 's/<img [^>]*src="//g')
 
-# Total number of images
 totalImages=$(echo "$imageTags" | wc -l)
 currentImage=0
 
@@ -25,7 +20,6 @@ echo -e "\033[1;91m \n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t       Initiating File Retri
 sleep 6
 clear
 
-# Download images and maintain their original names
 for imageUrl in $imageTags; do
     currentImage=$((currentImage + 1))
     imageName=$(basename "$imageUrl")
@@ -33,7 +27,6 @@ for imageUrl in $imageTags; do
     
     echo -e "\033[1;93mDownloading image [$currentImage/$totalImages]: $imageName...\033[0m"
     
-    # Simulate loading bar
     loading_bar="[--------------------]"
     for ((i=0; i<20; i++)); do
         loading_bar=${loading_bar/[-]/@}
@@ -41,15 +34,12 @@ for imageUrl in $imageTags; do
         sleep 0.02  # Adjust sleep duration for animation speed
     done
     
-    # Download image
     curl -s -o "$imagePath" "$imageUrl"
     
-    # Complete the loading bar
     echo -ne "\r[####################] [100%]"
     
     echo -e "\n\033[1;92mDownloaded: $imageName\033[0m"
     
-    # Add a line break
     echo
 done
 
